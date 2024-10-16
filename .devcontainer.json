@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "test": "dotnet test",
+    "build": "dotnet build TensorFlow.NET.sln",
+    "launch": "dotnet build TensorFlow.NET.sln && dotnet run --project src/TensorFlow.NET"
+  }
+}
