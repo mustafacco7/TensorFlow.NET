@@ -15,8 +15,10 @@ namespace Tensorflow.Text
         {
             return tf_with(ops.name_scope(name, "Ngrams", new { input }), scope =>
             {
-                name = scope;
-                var ngrams = tf.strings.ngrams(input, width, axis: axis, reduction_type: reduction_type.ToString(), string_separator: string_separator, name: name);
+                input = ops.convert_to_tensor(input, name: "input");
+
+                var ngrams = tf.strings.ngrams(input, width, axis: axis, reduction_type: reduction_type, string_separator: string_separator);
+
                 return ngrams;
             });
         }
