@@ -19,7 +19,7 @@ namespace Tensorflow.Text.Tokenizers
             return tokens;
         }
 
-        Tensor[] tokenize_with_offsets(Tensor input)
+        public Tensor[] tokenize_with_offsets(Tensor input)
         {
             return tf_with(ops.name_scope(null, "WhitespaceTokenize"), scope =>
             {
@@ -28,7 +28,7 @@ namespace Tensorflow.Text.Tokenizers
             });
         }
 
-        (Tensor, Tensor, Tensor) _whitespace_tokenize_with_offsets_encode_decode_wrapper(Tensor input_tensor)
+        public (Tensor, Tensor, Tensor) _whitespace_tokenize_with_offsets_encode_decode_wrapper(Tensor input_tensor)
         {
             // Decode the strings and get byte offsets
             var (codepoints, byte_start_offsets) = tf.strings.unicode_decode_with_offsets(input_tensor, "UTF-8");
