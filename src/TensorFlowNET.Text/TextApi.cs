@@ -13,6 +13,9 @@ namespace Tensorflow
         // Tokenization methods
         public ITokenizer WhitespaceTokenizer() => new WhitespaceTokenizer();
         public ITokenizer UnicodeScriptTokenizer() => new UnicodeScriptTokenizer();
+        public ITokenizer CharacterTokenizer() => new CharacterTokenizer();
+        public ITokenizer SubwordTokenizer() => new SubwordTokenizer();
+        public ITokenizer BytePairTokenizer() => new BytePairTokenizer();
 
         // Stemming method (placeholder, actual implementation needed)
         public string Stem(string word)
