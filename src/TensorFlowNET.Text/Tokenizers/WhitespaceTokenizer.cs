@@ -15,20 +15,19 @@ namespace Tensorflow.Text.Tokenizers
         /// <returns></returns>
         public Tensor tokenize(Tensor input)
         {
-            tokenize_with_offsets(input);
-            throw new NotImplementedException("");
+            var (tokens, _, _) = tokenize_with_offsets(input);
+            return tokens;
         }
 
         Tensor[] tokenize_with_offsets(Tensor input)
         {
-            tf_with(ops.name_scope(null, "WhitespaceTokenize"), scope =>
+            return tf_with(ops.name_scope(null, "WhitespaceTokenize"), scope =>
             {
-                _whitespace_tokenize_with_offsets_encode_decode_wrapper(input);
+                return _whitespace_tokenize_with_offsets_encode_decode_wrapper(input);
             });
-            throw new NotImplementedException("");
         }
 
-        Tensor _whitespace_tokenize_with_offsets_encode_decode_wrapper(Tensor input_tensor)
+        Tensor[] _whitespace_tokenize_with_offsets_encode_decode_wrapper(Tensor input_tensor)
         {
             // Decode the strings and get byte offsets
             var (codepoints, byte_start_offsets) = tf.strings.unicode_decode_with_offsets(input_tensor, "UTF-8");
@@ -39,7 +38,15 @@ namespace Tensorflow.Text.Tokenizers
                     array_ops.expand_dims(tf.strings.string_length(input_tensor), 1),
                     dtypes.int64)
             }, 1);
-            return input_tensor;
+
+            // Tokenize the codepoints on whitespaces
+            var tokens = tf.strings.unicode_split(codepoints, "UTF-8");
+
+            // Compute the start and end offsets for each token
+            var token_start_offsets = tf.gather(byte_start_offsets, tokens);
+            var token_end_offsets = tf.gather(byte_end_offsets, tokens);
+
+            return new Tensor[] { tokens, token_start_offsets, token_end_offsets };
         }
     }
 }
